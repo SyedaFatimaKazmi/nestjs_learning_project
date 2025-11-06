@@ -1,5 +1,5 @@
 import { Controller, Post, Body, Get, Param, Patch, Delete, ValidationPipe } from '@nestjs/common';
-import { ProductsService } from './products.service';
+import { ProductsService } from './product.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 
@@ -13,21 +13,21 @@ export class ProductsController {
     
     @Post()
     addProduct(
-        // @Body('title') prodTitle: string, 
-        // @Body('description') prodDesc: string, 
-        // @Body('price') prodPrice: number,
+        @Body('title') prodTitle: string, 
+        @Body('description') prodDesc: string, 
+        @Body('price') prodPrice: number,
 
         //using dtos
-        @Body(ValidationPipe) product: CreateProductDto
+        //@Body(ValidationPipe) product: CreateProductDto
 
         // or @Body('completebody') { title: string, description: string, price: number}
       ) { // any is the return type for function
         
 
-        // const generatedId = this.productsService.createProduct(
-        //     prodTitle, prodDesc, prodPrice);
-        // now using dto we just need to send the product
-        const generatedId = this.productsService.createProduct(product);
+        const generatedId = this.productsService.createProduct(
+            prodTitle, prodDesc, prodPrice);
+        //now using dto we just need to send the product
+        //const generatedId = this.productsService.createProduct(product);
         return { id: generatedId };
     }
 
@@ -45,19 +45,19 @@ export class ProductsController {
     @Patch(':id')
     updateProduct(
       @Param('id') prodId: string,  // instead of taking id as string, use string and parse as int using ParseIntPipe
-    //   @Body('title') prodTitle: string, 
-    //   @Body('description') prodDesc: string, 
-    //   @Body('price') prodPrice: number
-      @Body(ValidationPipe) product: UpdateProductDto
+      @Body('title') prodTitle: string, 
+      @Body('description') prodDesc: string, 
+      @Body('price') prodPrice: number
+      //@Body(ValidationPipe) product: UpdateProductDto
     ){
 
-//        this.productsService.updateProduct(prodId, prodTitle, prodDesc, prodPrice);
-        this.productsService.updateProduct(prodId, product);
+        this.productsService.updateProduct(prodId, prodTitle, prodDesc, prodPrice);
+        //this.productsService.updateProduct(prodId, product);
         return null;
     }
 
     @Delete(':id')
-    deleteProduct(@Param('id') prodId: String){
+    deleteProduct(@Param('id') prodId: string){
         this.productsService.deleteProduct(prodId);
         return null;
     }
